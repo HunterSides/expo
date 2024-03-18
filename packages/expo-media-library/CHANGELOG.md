@@ -6,6 +6,8 @@
 
 ### 🎉 New features
 
+- [Android] Add support for granular permissions.
+
 ### 🐛 Bug fixes
 
 ### 💡 Others
