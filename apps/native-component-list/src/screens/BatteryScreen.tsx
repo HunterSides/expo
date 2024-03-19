@@ -44,6 +44,7 @@ export default function BatteryScreen() {
     };
   }, []);
 
+  console.log(globalThis.expo.modules.ExpoBattery.startObserving);
   return (
     <ScrollView style={{ padding: 10 }}>
       <MonoText>

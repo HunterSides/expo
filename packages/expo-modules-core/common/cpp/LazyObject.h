@@ -32,6 +32,10 @@ public:
 
   std::vector<jsi::PropNameID> getPropertyNames(jsi::Runtime &rt) override;
 
+  inline std::shared_ptr<jsi::Object> getBackedObject() const {
+    return backedObject;
+  }
+
 private:
   const LazyObjectInitializer initializer;
   std::shared_ptr<jsi::Object> backedObject;

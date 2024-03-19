@@ -1,5 +1,6 @@
 #include "JSIUtils.h"
 #include "EventEmitter.h"
+#include "LazyObject.h"
 
 namespace expo::EventEmitter {
 
@@ -164,6 +165,14 @@ jsi::Function getClass(jsi::Runtime &runtime) {
     .getPropertyAsFunction(runtime, "EventEmitter");
 }
 
+jsi::Object unwrapLazyObject(jsi::Runtime &runtime, const jsi::Value &objectValue) {
+  jsi::Object object = objectValue.getObject(runtime);
+  if (object.isHostObject<LazyObject>(runtime)) {
+    return *object.getHostObject<LazyObject>(runtime)->getBackedObject();
+  }
+  return object;
+}
+
 void installClass(jsi::Runtime &runtime) {
   jsi::Function eventEmitterClass = common::createClass(runtime, "EventEmitter");
   jsi::Object prototype = eventEmitterClass.getPropertyAsObject(runtime, "prototype");
@@ -171,7 +180,7 @@ void installClass(jsi::Runtime &runtime) {
   jsi::HostFunctionType addListenerHost = [](jsi::Runtime &runtime, const jsi::Value &thisValue, const jsi::Value *args, size_t count) -> jsi::Value {
     std::string eventName = args[0].asString(runtime).utf8(runtime);
     jsi::Function listener = args[1].asObject(runtime).asFunction(runtime);
-    jsi::Object thisObject = thisValue.getObject(runtime);
+    jsi::Object thisObject = unwrapLazyObject(runtime, thisValue);
 
     addListener(runtime, thisObject, eventName, listener);
     return createEventSubscription(runtime, eventName, std::move(thisObject), std::move(listener));

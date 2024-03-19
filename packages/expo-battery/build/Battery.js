@@ -2,7 +2,7 @@ import { EventEmitter } from 'expo-modules-core';
 import { useEffect, useState } from 'react';
 import { BatteryState, } from './Battery.types';
 import ExpoBattery from './ExpoBattery';
-const BatteryEventEmitter = new EventEmitter(ExpoBattery);
+const BatteryEventEmitter = ExpoBattery;//new EventEmitter(ExpoBattery);
 // @needsAudit
 /**
  * Resolves with whether the battery API is available on the current device. The value of this
